@@ -1,0 +1,88 @@
+USE yxie89assign2db;
+-- Query 1
+SELECT description FROM product;
+
+-- Query 2
+SELECT DISTINCT customerCity FROM customer;
+
+-- Query 3
+SELECT * FROM agent ORDER BY agentCity;
+
+-- Query 4
+SELECT firstName, lastName 
+FROM customer 
+WHERE customerCity = 'Springfield';
+
+-- Query 5
+SELECT customer.lastName 
+FROM customer, agent
+WHERE customer.agentid = agent.agentID AND agent.firstName = 'Regis';
+
+-- Query 6
+SELECT description 
+FROM product 
+WHERE description LIKE '%pad%';
+
+-- Query 7
+SELECT customer.lastName, product.description, purchase.quantity 
+FROM purchase, customer, product
+WHERE purchase.customerid = customer.customerID AND purchase.productid = product.productID;
+
+-- Query 8
+SELECT sum(quantity) AS "Homer's Total Purchases"
+FROM purchase, customer 
+WHERE purchase.customerid = customer.customerID AND customer.firstName = 'Homer';
+
+-- Query 9 
+SELECT firstName, lastName, sum(quantity)
+FROM purchase, customer
+WHERE purchase.customerid = customer.customerID
+GROUP BY firstName, lastName;
+
+-- Query 10
+SELECT description, itemOnHandNum AS 'quantity on hand' 
+FROM product
+WHERE productID NOT IN
+(SELECT productid FROM purchase);
+
+-- Query 11
+SELECT description, itemOnHandNum AS 'quantity'
+FROM product
+WHERE product.productID NOT IN (SELECT purchase.productid FROM purchase, customer 
+	WHERE purchase.customerid = customer.customerID AND 
+	customer.firstName = 'Fred' AND customer.lastName = 'Flintstone');
+
+-- Query 12
+SELECT customer.firstName AS 'customer firstname',
+customer.lastName AS 'customer lastname',
+agent.firstName AS 'agent firstname',
+agent.lastName AS 'agent lastname'
+FROM customer, agent
+WHERE customer.agentid = agent.agentID 
+AND customer.customerCity = agent.agentCity;
+
+
+
+-- Query 13
+SELECT sum(quantity) AS 'Number of knee pads purchased'
+FROM purchase, product
+WHERE purchase.productid = product.productID AND description = 'Knee Pads';
+
+-- Query 14
+
+SELECT description
+FROM product
+WHERE productID IN(
+SELECT productid
+FROM purchase
+GROUP BY productid
+HAVING count(*) > 3);
+
+-- Query 15
+
+SELECT agent.firstName, agent.lastName 
+FROM agent, customer, purchase, product
+WHERE purchase.productid = product.productID 
+AND purchase.customerid = customer.customerID
+AND product.description = 'Knee Pads' 
+AND agent.agentID = customer.agentid;

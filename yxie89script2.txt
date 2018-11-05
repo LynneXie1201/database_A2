@@ -1,0 +1,62 @@
+-- import data from local file
+USE yxie89assign2db;
+LOAD DATA LOCAL INFILE 'productData.csv' INTO TABLE product FIELDS TERMINATED BY ',';
+SELECT * from product;
+
+-- Insert values to product table
+INSERT INTO product VALUES ('66', 'Elbow pads', 14.25, 120);
+INSERT INTO product VALUES ('10', 'Phone case', 22.50, 190);
+INSERT INTO product VALUES ('01', 'Microwave Oven', 183.34, 33);
+
+-- Insert values to agent table
+INSERT INTO agent VALUES ('99', 'Hugh', 'Grant', 'Springfield', 16);
+INSERT INTO agent VALUES ('22', 'Courtney', 'Cox', 'New York', 25);
+INSERT INTO agent VALUES ('66', 'Rosie', 'ODonnell', 'Ottawa', 100);
+INSERT INTO agent VALUES ('33', 'David', 'Letterman', 'Bedrock', 100);
+INSERT INTO agent VALUES ('11', 'Regis', 'Philbin', 'Boston', 33);
+INSERT INTO agent VALUES ('12', 'Rosie', 'Cox', 'Ottawa', 50);
+INSERT INTO agent VALUES ('10', 'Yilin', 'Xie', 'Shiyan', 99);
+
+-- Insert values to customer table
+INSERT INTO customer VALUES ('21', 'Homer', 'Simpson', 'Springfield', '686-8956', '99');
+INSERT INTO customer VALUES ('31', 'Sideshow', 'Bob', 'Springfield', '686-5555', '66');
+INSERT INTO customer VALUES ('12', 'Monty', 'Burns', 'Springfield', '789-0000', '99');
+INSERT INTO customer VALUES ('15', 'Fred', 'Flintstone', 'Bedrock', '777-2345', '11');
+INSERT INTO customer VALUES ('13', 'Super', 'Man', 'Kypto', '888-1234', '33');
+INSERT INTO customer VALUES ('10', 'Barney', 'Rubble', 'Bedrock', '777-1234', '11');
+INSERT INTO customer VALUES ('14', 'Peter', 'Griffens', 'Providence', '987-4567', '99');
+
+-- Insert values to purchase table
+INSERT INTO purchase VALUES ('21', '99', 20);
+INSERT INTO purchase VALUES ('21', '12', 14);
+INSERT INTO purchase VALUES ('21', '66', 10);
+INSERT INTO purchase VALUES ('31', '99', 1);
+INSERT INTO purchase VALUES ('31', '12', 2);
+INSERT INTO purchase VALUES ('31', '78', 4);
+INSERT INTO purchase VALUES ('31', '66', 2);
+INSERT INTO purchase VALUES ('15', '66', 2);
+INSERT INTO purchase VALUES ('15', '78', 2);
+INSERT INTO purchase VALUES ('14', '66', 19);
+
+-- Show all the data in tables
+SELECT * from product;
+SELECT * from agent;
+SELECT * from customer;
+SELECT * from purchase;
+
+-- Updata tables
+UPDATE customer SET firstName = 'Wonder', 
+lastName = 'Woman' WHERE firstName = 'Super' AND lastName = 'Man';
+
+-- MIGHT NEED CHANGE
+UPDATE purchase SET quantity = 5 
+WHERE customerid IN (SELECT customerID FROM customer WHERE firstName = 'Sideshow');
+
+UPDATE customer SET customerCity = 'Boston'
+Where agentid IN (SELECT agentID FROM agent WHERE firstName = 'Regis');
+
+-- Show all the tables again to prove the update worked
+SELECT * from product;
+SELECT * from agent;
+SELECT * from customer;
+SELECT * from purchase;

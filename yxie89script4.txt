@@ -1,0 +1,39 @@
+-- Show all data
+USE yxie89assign2db;
+
+SELECT * from product;
+SELECT * from agent;
+SELECT * from customer;
+SELECT * from purchase;
+
+-- Create a view
+CREATE VIEW purchaseSummary AS
+SELECT customer.firstName, customer.lastName, 
+product.description, purchase.quantity, 
+product.costperItem AS 'price/item',
+purchase.quantity * product.costperItem AS 'totalCost'
+FROM customer, purchase, product
+WHERE purchase.productid = product.productID 
+AND purchase.customerid = customer.customerID
+ORDER BY customer.lastName;
+
+SELECT * FROM purchaseSummary;
+
+SELECT * FROM purchaseSummary
+WHERE totalCost > 100;
+
+-- Delete products I made up
+DELETE FROM product
+WHERE description = 'Phone case' 
+OR description = 'Microwave Oven';
+
+-- Prove DELETE worked
+SELECT * FROM product;
+
+-- Delete all agents from Springfield
+DELETE FROM agent
+WHERE agentCity = 'Springfield'; 
+
+-- The row for all agents who are from Springfield was not deleted because the agent from Springfield 
+-- has customers to deal with. And according to the foreign key constraint in customer table, this
+-- would cause an error to occur and do not delete the agent

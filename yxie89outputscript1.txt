@@ -1,0 +1,91 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SHOW DATABASES
+--------------
+
+Database
+information_schema
+junkdb
+myfirstdb
+mysql
+performance_schema
+yxie89assign2db
+--------------
+DROP DATABASE IF EXISTS yxie89assign2db
+--------------
+
+--------------
+CREATE DATABASE yxie89assign2db
+--------------
+
+--------------
+GRANT USAGE ON *.* TO 'ta'@'localhost'
+--------------
+
+--------------
+DROP USER 'ta'@'localhost'
+--------------
+
+--------------
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319'
+--------------
+
+--------------
+GRANT ALL PRIVILEGES ON yxie89assign2db.* TO 'ta'@'localhost'
+--------------
+
+--------------
+FLUSH PRIVILEGES
+--------------
+
+--------------
+SHOW TABLES
+--------------
+
+--------------
+CREATE TABLE agent (
+	agentID CHAR(2) NOT NULL PRIMARY KEY, 
+	firstName CHAR(30), 
+	lastName CHAR(30), 
+	agentCity CHAR(15), 
+	commissionPercent INT)
+--------------
+
+--------------
+CREATE TABLE customer (
+	customerID CHAR(2) NOT NULL PRIMARY KEY, 
+	firstName CHAR(30), 
+	lastName CHAR(30), 
+	customerCity CHAR(15), 
+	phoneNum VARCHAR(15), 
+	agentid CHAR(2) NOT NULL, 
+	FOREIGN KEY (agentid) references agent(agentID))
+--------------
+
+--------------
+CREATE TABLE product (
+	productID CHAR(2) NOT NULL PRIMARY KEY,
+	description CHAR(20),
+	costperItem FLOAT(6,2),
+	itemOnHandNum INT)
+--------------
+
+--------------
+CREATE TABLE purchase (
+	customerid CHAR(2) NOT NULL,
+	productid CHAR(2) NOT NULL,
+	quantity INT,
+	PRIMARY KEY (customerid, productid),
+	FOREIGN KEY (customerid) references customer(customerID),
+	FOREIGN KEY (productid) references product(productID))
+--------------
+
+--------------
+SHOW TABLES
+--------------
+
+Tables_in_yxie89assign2db
+agent
+customer
+product
+purchase

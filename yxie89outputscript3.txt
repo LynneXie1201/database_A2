@@ -1,0 +1,174 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SELECT description FROM product
+--------------
+
+description
+Microwave Oven
+Phone case
+Bike
+Socks
+Elbow pads
+Knee Pads
+Roller Blades
+Helmet
+--------------
+SELECT DISTINCT customerCity FROM customer
+--------------
+
+customerCity
+Boston
+Springfield
+Kypto
+Providence
+--------------
+SELECT * FROM agent ORDER BY agentCity
+--------------
+
+agentID	firstName	lastName	agentCity	commissionPercent
+33	David	Letterman	Bedrock	100
+11	Regis	Philbin	Boston	33
+22	Courtney	Cox	New York	25
+12	Rosie	Cox	Ottawa	50
+66	Rosie	ODonnell	Ottawa	100
+10	Yilin	Xie	Shiyan	99
+99	Hugh	Grant	Springfield	16
+--------------
+SELECT firstName, lastName 
+FROM customer 
+WHERE customerCity = 'Springfield'
+--------------
+
+firstName	lastName
+Monty	Burns
+Homer	Simpson
+Sideshow	Bob
+--------------
+SELECT customer.lastName 
+FROM customer, agent
+WHERE customer.agentid = agent.agentID AND agent.firstName = 'Regis'
+--------------
+
+lastName
+Rubble
+Flintstone
+--------------
+SELECT description 
+FROM product 
+WHERE description LIKE '%pad%'
+--------------
+
+description
+Elbow pads
+Knee Pads
+--------------
+SELECT customer.lastName, product.description, purchase.quantity 
+FROM purchase, customer, product
+WHERE purchase.customerid = customer.customerID AND purchase.productid = product.productID
+--------------
+
+lastName	description	quantity
+Griffens	Elbow pads	19
+Flintstone	Elbow pads	2
+Flintstone	Knee Pads	2
+Simpson	Socks	14
+Simpson	Elbow pads	10
+Simpson	Helmet	20
+Bob	Socks	5
+Bob	Elbow pads	5
+Bob	Knee Pads	5
+Bob	Helmet	5
+--------------
+SELECT sum(quantity) AS "Homer's Total Purchases"
+FROM purchase, customer 
+WHERE purchase.customerid = customer.customerID AND customer.firstName = 'Homer'
+--------------
+
+Homer's Total Purchases
+44
+--------------
+SELECT firstName, lastName, sum(quantity)
+FROM purchase, customer
+WHERE purchase.customerid = customer.customerID
+GROUP BY firstName, lastName
+--------------
+
+firstName	lastName	sum(quantity)
+Fred	Flintstone	4
+Homer	Simpson	44
+Peter	Griffens	19
+Sideshow	Bob	20
+--------------
+SELECT description, itemOnHandNum AS 'quantity on hand' 
+FROM product
+WHERE productID NOT IN
+(SELECT productid FROM purchase)
+--------------
+
+description	quantity on hand
+Microwave Oven	33
+Phone case	190
+Bike	200
+Roller Blades	89
+--------------
+SELECT description, itemOnHandNum AS 'quantity'
+FROM product
+WHERE product.productID NOT IN (SELECT purchase.productid FROM purchase, customer 
+	WHERE purchase.customerid = customer.customerID AND 
+	customer.firstName = 'Fred' AND customer.lastName = 'Flintstone')
+--------------
+
+description	quantity
+Microwave Oven	33
+Phone case	190
+Bike	200
+Socks	100
+Roller Blades	89
+Helmet	30
+--------------
+SELECT customer.firstName AS 'customer firstname',
+customer.lastName AS 'customer lastname',
+agent.firstName AS 'agent firstname',
+agent.lastName AS 'agent lastname'
+FROM customer, agent
+WHERE customer.agentid = agent.agentID 
+AND customer.customerCity = agent.agentCity
+--------------
+
+customer firstname	customer lastname	agent firstname	agent lastname
+Barney	Rubble	Regis	Philbin
+Monty	Burns	Hugh	Grant
+Fred	Flintstone	Regis	Philbin
+Homer	Simpson	Hugh	Grant
+--------------
+SELECT sum(quantity) AS 'Number of knee pads purchased'
+FROM purchase, product
+WHERE purchase.productid = product.productID AND description = 'Knee Pads'
+--------------
+
+Number of knee pads purchased
+7
+--------------
+SELECT description
+FROM product
+WHERE productID IN(
+SELECT productid
+FROM purchase
+GROUP BY productid
+HAVING count(*) > 3)
+--------------
+
+description
+Elbow pads
+--------------
+SELECT agent.firstName, agent.lastName 
+FROM agent, customer, purchase, product
+WHERE purchase.productid = product.productID 
+AND purchase.customerid = customer.customerID
+AND product.description = 'Knee Pads' 
+AND agent.agentID = customer.agentid
+--------------
+
+firstName	lastName
+Regis	Philbin
+Rosie	ODonnell

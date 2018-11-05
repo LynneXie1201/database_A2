@@ -1,0 +1,53 @@
+-- Build the database
+SHOW DATABASES;
+DROP DATABASE IF EXISTS yxie89assign2db;
+CREATE DATABASE yxie89assign2db;
+USE yxie89assign2db;
+
+
+-- Make sure the TA has access to my database
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON yxie89assign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+
+-- Create tables
+SHOW TABLES;
+
+-- Agent table
+CREATE TABLE agent (
+	agentID CHAR(2) NOT NULL PRIMARY KEY, 
+	firstName CHAR(30), 
+	lastName CHAR(30), 
+	agentCity CHAR(15), 
+	commissionPercent INT);
+
+-- Customer table
+CREATE TABLE customer (
+	customerID CHAR(2) NOT NULL PRIMARY KEY, 
+	firstName CHAR(30), 
+	lastName CHAR(30), 
+	customerCity CHAR(15), 
+	phoneNum VARCHAR(15), 
+	agentid CHAR(2) NOT NULL, 
+	FOREIGN KEY (agentid) references agent(agentID));
+
+-- Product table
+CREATE TABLE product (
+	productID CHAR(2) NOT NULL PRIMARY KEY,
+	description CHAR(20),
+	costperItem FLOAT(6,2),
+	itemOnHandNum INT);
+
+-- Purchase table
+CREATE TABLE purchase (
+	customerid CHAR(2) NOT NULL,
+	productid CHAR(2) NOT NULL,
+	quantity INT,
+	PRIMARY KEY (customerid, productid),
+	FOREIGN KEY (customerid) references customer(customerID),
+	FOREIGN KEY (productid) references product(productID));
+
+-- List all tables
+SHOW TABLES;
